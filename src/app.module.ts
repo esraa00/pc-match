@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from './user/user.entity';
 //for root => automatically be shared down into all other modules
 @Module({
   imports: [
@@ -9,7 +10,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
@@ -19,7 +19,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           database: config.get<string>('DB_NAME'),
           password: config.get<string>('DB_PASSWORD'),
           synchronize: true,
-          entities: [],
+          entities: [User],
         };
       },
     }),
