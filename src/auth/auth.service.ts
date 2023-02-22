@@ -9,6 +9,7 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { compare, hash } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt/dist';
 import { ConfigService } from '@nestjs/config';
+import { LogInUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,12 +35,15 @@ export class AuthService {
     return tokens;
   }
 
-  async loginLocal(email: string, password: string) {
-    const userFound = await this.userService.findOneByEmail(email);
+  async loginLocal(body: LogInUserDto) {
+    const userFound = await this.userService.findOneByEmail(body.email);
     if (!userFound) throw new NotFoundException('user not found');
-    const isPasswordMatches = await compare(password, userFound.password);
+    const isPasswordMatches = await compare(body.password, userFound.password);
     if (!isPasswordMatches)
       throw new UnauthorizedException('password is incorrect');
+    const tokens = await this.signToken(userFound.id);
+    await this.updateHashedRefreshToken(userFound.id, tokens.refreshToken);
+    return tokens;
   }
 
   async signToken(userId: number) {
