@@ -1,0 +1,12 @@
+## sign up with form
+
+POST http://localhost:3000/auth/local/signup
+Content-Type: application/json
+
+{
+  "firstName":"mai",
+  "lastName":"Mohamed",
+  "email":"esraa@gmail.com",
+  "phoneNumber":"01270304453",
+  "password":"Esraaguest5056@"
+}
