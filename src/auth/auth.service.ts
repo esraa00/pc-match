@@ -3,6 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -30,9 +31,10 @@ export class AuthService {
       hashedPassword,
       body.phoneNumber,
     );
-    const tokens = await this.signToken(user.id);
-    await this.updateHashedRefreshToken(user.id, tokens.refreshToken);
-    return tokens;
+    const accessToken = await this.signAccessToken(user.id);
+    const refreshToken = await this.signRefreshToken(user.id);
+    await this.updateHashedRefreshToken(user.id, refreshToken);
+    return { accessToken, refreshToken };
   }
 
   async loginLocal(body: LogInUserDto) {
@@ -41,36 +43,66 @@ export class AuthService {
     const isPasswordMatches = await compare(body.password, userFound.password);
     if (!isPasswordMatches)
       throw new UnauthorizedException('password is incorrect');
-    const tokens = await this.signToken(userFound.id);
-    await this.updateHashedRefreshToken(userFound.id, tokens.refreshToken);
-    return tokens;
-  }
-
-  async signToken(userId: number) {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(
-        { userId },
-        {
-          secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
-          expiresIn: 60 * 15,
-        },
-      ),
-      this.jwtService.signAsync(
-        { userId },
-        {
-          secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-          expiresIn: 60 * 60 * 24 * 7,
-        },
-      ),
-    ]);
+    const accessToken = await this.signAccessToken(userFound.id);
+    const refreshToken = await this.signRefreshToken(userFound.id);
+    await this.updateHashedRefreshToken(userFound.id, refreshToken);
     return {
       accessToken,
       refreshToken,
     };
   }
 
+  async refreshToken(userId: number, refreshToken: string) {
+    const user = await this.userService.findOneById(userId);
+    if (!user) throw new NotFoundException('user not found');
+
+    const isRefreshTokenMatches = await compare(
+      refreshToken,
+      user.hashedRefreshToken,
+    );
+    if (!isRefreshTokenMatches)
+      throw new ForbiddenException("refresh token doesn't match");
+
+    const accessToken = await this.signRefreshToken(user.id);
+    return accessToken;
+  }
+
+  async logout(id: number) {
+    await this.nullHashedRefreshToken(id);
+  }
+
+  async signAccessToken(userId: number) {
+    const accessToken = await this.jwtService.signAsync(
+      { userId },
+      {
+        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+        expiresIn: parseInt(this.configService.get('JWT_ACCESS_TOKEN_EXP')),
+      },
+    );
+    return accessToken;
+  }
+
+  async signRefreshToken(userId: number) {
+    const refreshToken = await this.jwtService.signAsync(
+      { userId },
+      {
+        secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+        expiresIn: parseInt(this.configService.get('JWT_REFRESH_TOKEN_EXP')),
+      },
+    );
+    return refreshToken;
+  }
+
   async updateHashedRefreshToken(id: number, refreshToken: string) {
     const hashedRefreshToken = await hash(refreshToken, 10);
     await this.userService.update(id, { hashedRefreshToken });
+  }
+
+  async nullHashedRefreshToken(id: number) {
+    const user = await this.userService.findOneById(id);
+    if (!user) throw new NotFoundException('user not found');
+    await this.userService.update(id, {
+      hashedRefreshToken: null,
+    });
   }
 }
