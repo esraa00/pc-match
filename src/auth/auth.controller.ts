@@ -6,16 +6,17 @@ import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { GetCookies, GetCurrentUser } from 'src/decorators';
 import { UseAccessTokenGuard, UseRefreshTokenGuard } from 'src/guards';
+import { EmailConfirmationService } from 'src/email/email-confirmation.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    private authService: AuthService,
-    private configService: ConfigService,
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+    private readonly emailConfirmationService: EmailConfirmationService,
   ) {}
 
   @Post('local/signup')
-  // @UseInterceptors(new SetCookieInterceptor(['accessToken', 'refreshToken'], [{}, {}]))
   async signupLocal(
     @Body() body: CreateUserDTO,
     @Res({ passthrough: true }) res: Response,
@@ -23,6 +24,7 @@ export class AuthController {
     const { accessToken, refreshToken } = await this.authService.signupLocal(
       body,
     );
+    this.emailConfirmationService.sendVerificationLink(body.email);
     res.cookie('accessToken', accessToken, {
       maxAge: +this.configService.get('COOKIE_ACCESS_TOKEN_EXP'),
     });
