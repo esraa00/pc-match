@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { NotFoundException } from '@nestjs/common/exceptions';
+import { Role } from 'src/role/role.entity';
 
 @Injectable()
 export class UserService {
@@ -14,13 +15,17 @@ export class UserService {
     email: string,
     password: string,
     phoneNumber: string,
+    role: Role,
   ) {
+    const userRoles = [];
+    userRoles.push(role);
     const user = this.repo.create({
       firstName,
       lastName,
       email,
       password,
       phoneNumber,
+      roles: userRoles,
     });
     return await this.repo.save(user);
   }
@@ -34,9 +39,16 @@ export class UserService {
   }
 
   async update(id: number, data: Partial<User>) {
-    const userFound = await this.repo.findOneBy({ id });
-    if (!userFound) throw new NotFoundException('user not found');
+    const userFound = await this.findOneById(id);
+    if (!userFound) throw new NotFoundException('user  not found');
     Object.assign(userFound, data);
+    return await this.repo.save(userFound);
+  }
+
+  async markEmailAsConfirmed(email: string) {
+    const userFound = await this.findOneByEmail(email);
+    if (!userFound) throw new NotFoundException('user not found');
+    userFound.isEmailConfirmed = true;
     return await this.repo.save(userFound);
   }
 }
