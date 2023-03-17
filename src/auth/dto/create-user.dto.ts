@@ -6,6 +6,7 @@ import {
   MaxLength,
   MinLength,
   NotContains,
+  IsNotEmpty,
 } from 'class-validator';
 import { TransformFnParams, Transform } from 'class-transformer';
 
@@ -17,6 +18,7 @@ export class CreateUserDTO {
   @NotContains(' ', { message: "firstName shouldn't contain spaces" })
   @MinLength(2)
   @MaxLength(20)
+  @IsNotEmpty()
   firstName: string;
 
   @Transform(
@@ -54,4 +56,10 @@ export class CreateUserDTO {
 
   // TODO - add a custom validation to make it equal to password
   confirmPassword: string;
+
+  @Transform(
+    ({ value }: TransformFnParams) => typeof value === 'string' && value.trim(),
+  )
+  @IsNotEmpty()
+  role: string;
 }
