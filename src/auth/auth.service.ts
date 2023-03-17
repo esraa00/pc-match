@@ -8,21 +8,24 @@ import {
 import { UserService } from 'src/user/user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { compare, hash } from 'bcrypt';
-import { JwtService } from '@nestjs/jwt/dist';
-import { ConfigService } from '@nestjs/config';
 import { LogInUserDto } from './dto/login-user.dto';
+import { CustomJwtService } from 'src/custom-jwt/custom-jwt.service';
+import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
-    private configService: ConfigService,
+    private roleService: RoleService,
+    private customJwtService: CustomJwtService,
   ) {}
 
   async signupLocal(body: CreateUserDTO) {
     const userFound = await this.userService.findOneByEmail(body.email);
     if (userFound) throw new BadRequestException('email already in use');
+    const role = await this.roleService.findOneByName(body.role);
+    if (!role) throw new BadRequestException('role is not valid');
+
     const hashedPassword = await hash(body.password, 10);
     const user = await this.userService.create(
       body.firstName,
@@ -30,9 +33,10 @@ export class AuthService {
       body.email,
       hashedPassword,
       body.phoneNumber,
+      role,
     );
-    const accessToken = await this.signAccessToken(user.id);
-    const refreshToken = await this.signRefreshToken(user.id);
+    const accessToken = this.customJwtService.signAccessToken(user.id);
+    const refreshToken = this.customJwtService.signRefreshToken(user.id);
     await this.updateHashedRefreshToken(user.id, refreshToken);
     return { accessToken, refreshToken };
   }
@@ -40,11 +44,15 @@ export class AuthService {
   async loginLocal(body: LogInUserDto) {
     const userFound = await this.userService.findOneByEmail(body.email);
     if (!userFound) throw new NotFoundException('user not found');
+
+    if (!userFound.isEmailConfirmed)
+      throw new UnauthorizedException('please confirm your email to login');
+
     const isPasswordMatches = await compare(body.password, userFound.password);
     if (!isPasswordMatches)
       throw new UnauthorizedException('password is incorrect');
-    const accessToken = await this.signAccessToken(userFound.id);
-    const refreshToken = await this.signRefreshToken(userFound.id);
+    const accessToken = this.customJwtService.signAccessToken(userFound.id);
+    const refreshToken = this.customJwtService.signRefreshToken(userFound.id);
     await this.updateHashedRefreshToken(userFound.id, refreshToken);
     return {
       accessToken,
@@ -63,34 +71,12 @@ export class AuthService {
     if (!isRefreshTokenMatches)
       throw new ForbiddenException("refresh token doesn't match");
 
-    const accessToken = await this.signRefreshToken(user.id);
+    const accessToken = this.customJwtService.signRefreshToken(user.id);
     return accessToken;
   }
 
   async logout(id: number) {
     await this.nullHashedRefreshToken(id);
-  }
-
-  async signAccessToken(userId: number) {
-    const accessToken = await this.jwtService.signAsync(
-      { userId },
-      {
-        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
-        expiresIn: parseInt(this.configService.get('JWT_ACCESS_TOKEN_EXP')),
-      },
-    );
-    return accessToken;
-  }
-
-  async signRefreshToken(userId: number) {
-    const refreshToken = await this.jwtService.signAsync(
-      { userId },
-      {
-        secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-        expiresIn: parseInt(this.configService.get('JWT_REFRESH_TOKEN_EXP')),
-      },
-    );
-    return refreshToken;
   }
 
   async updateHashedRefreshToken(id: number, refreshToken: string) {
