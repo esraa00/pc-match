@@ -4,7 +4,11 @@ import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './user/user.entity';
 import { AuthModule } from './auth/auth.module';
-import { AccessTokenStrategy, refreshTokenStrategy } from './auth/strategies';
+import { EmailModule } from './email/email.module';
+import { CustomJwtModule } from './custom-jwt/custom-jwt.module';
+import { RoleModule } from './role/role.module';
+import { Role } from './role/role.entity';
+
 //for root => automatically be shared down into all other modules
 @Module({
   imports: [
@@ -23,12 +27,15 @@ import { AccessTokenStrategy, refreshTokenStrategy } from './auth/strategies';
           database: config.get<string>('DB_NAME'),
           password: config.get<string>('DB_PASSWORD'),
           synchronize: true,
-          entities: [User],
+          entities: [User, Role],
         };
       },
     }),
     UserModule,
     AuthModule,
+    EmailModule,
+    CustomJwtModule,
+    RoleModule,
   ],
 })
 export class AppModule {}
