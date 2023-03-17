@@ -1,9 +1,12 @@
+import { Role } from 'src/role/role.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 @Entity()
@@ -26,6 +29,12 @@ export class User {
   @Column()
   phoneNumber: string;
 
+  @Column({ nullable: true })
+  profilePicture: string;
+
+  @Column({ default: false })
+  isEmailConfirmed: boolean;
+
   @Column({ unique: true, nullable: true })
   googleId: string;
 
@@ -37,6 +46,10 @@ export class User {
 
   @Column({ nullable: true })
   hashedRefreshToken: string;
+
+  @ManyToMany(() => Role)
+  @JoinTable({ name: 'users_roles' })
+  roles: Role[];
 
   @CreateDateColumn()
   createdAt: Date;
