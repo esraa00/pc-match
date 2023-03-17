@@ -10,4 +10,7 @@ export class RoleService {
     const role = this.repo.create({ roleName });
     return await this.repo.save(role);
   }
+  async findOneByName(roleName: string) {
+    return await this.repo.findBy({ roleName });
+  }
 }
