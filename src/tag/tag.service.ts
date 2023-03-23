@@ -23,4 +23,8 @@ export class TagService {
   async find() {
     return await this.repo.find();
   }
+
+  async delete(tagName: string) {
+    return await this.repo.delete({ tagName });
+  }
 }
