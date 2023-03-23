@@ -15,4 +15,8 @@ export class CategoryService {
   async findOneByName(categoryName: string) {
     return await this.repo.findOneBy({ categoryName });
   }
+
+  async findOneById(id: number) {
+    return await this.repo.findOneBy({ id });
+  }
 }
