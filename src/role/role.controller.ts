@@ -6,8 +6,10 @@ import {
   Get,
   Param,
   NotFoundException,
+  Delete,
 } from '@nestjs/common';
 import { CreateRoleDTO } from './dto/create-role.dto';
+import { DeleteRoleByNameDTO } from './dto/delete-route-by-name.dto';
 import { GetRoleByNameDTO } from './dto/get-role-by-name.dto';
 import { RoleService } from './role.service';
 
@@ -37,5 +39,14 @@ export class RoleController {
   async getAllRoles() {
     const roles = await this.roleService.find();
     return roles;
+  }
+
+  @Delete('/:roleName')
+  async deleteRoleByName(@Param() deleteRoleByNameDTO: DeleteRoleByNameDTO) {
+    const role = await this.roleService.findOneByName(
+      deleteRoleByNameDTO.roleName,
+    );
+    if (!role) throw new NotFoundException('no role found to delete');
+    return await this.roleService.delete(deleteRoleByNameDTO.roleName);
   }
 }
