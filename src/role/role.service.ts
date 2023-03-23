@@ -23,4 +23,8 @@ export class RoleService {
   async find() {
     return await this.repo.find();
   }
+
+  async delete(roleName: string) {
+    return await this.repo.delete({ roleName });
+  }
 }
