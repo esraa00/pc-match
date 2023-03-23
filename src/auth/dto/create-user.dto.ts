@@ -56,10 +56,4 @@ export class CreateUserDTO {
 
   // TODO - add a custom validation to make it equal to password
   confirmPassword: string;
-
-  @Transform(
-    ({ value }: TransformFnParams) => typeof value === 'string' && value.trim(),
-  )
-  @IsNotEmpty()
-  role: string;
 }
