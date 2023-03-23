@@ -15,4 +15,8 @@ export class TagService {
   async findOneByName(tagName: string) {
     return await this.repo.findOneBy({ tagName });
   }
+
+  async findOneById(id: number) {
+    return await this.repo.findOneBy({ id });
+  }
 }
