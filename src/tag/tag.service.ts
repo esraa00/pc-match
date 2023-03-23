@@ -7,6 +7,11 @@ import { Tag } from './tag.entity';
 export class TagService {
   constructor(@InjectRepository(Tag) private repo: Repository<Tag>) {}
 
+  async create(tagName: string) {
+    const tag = this.repo.create({ tagName });
+    return await this.repo.save(tag);
+  }
+
   async findOneByName(tagName: string) {
     return await this.repo.findOneBy({ tagName });
   }
