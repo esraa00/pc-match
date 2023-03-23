@@ -32,4 +32,10 @@ export class RoleController {
     if (!role) throw new NotFoundException('role was not found');
     return await this.roleService.findOneByName(getRoleByNameDTO.roleName);
   }
+
+  @Get()
+  async getAllRoles() {
+    const roles = await this.roleService.find();
+    return roles;
+  }
 }
