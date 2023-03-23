@@ -6,9 +6,11 @@ import {
   Get,
   Param,
   NotFoundException,
+  Delete,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDTO } from './dto/create-category.dto';
+import { DeleteCategoryByNameDTO } from './dto/delete-category-by-name.dto';
 import { GetCategoryByNameDTO } from './dto/get-category-by-name.dto';
 
 @Controller('category')
@@ -39,5 +41,18 @@ export class CategoryController {
   async getAllCategories() {
     const categories = await this.categoryService.find();
     return categories;
+  }
+
+  @Delete('/:categoryName')
+  async deleteCategoryByName(
+    @Param() deleteCategoryByNameDTO: DeleteCategoryByNameDTO,
+  ) {
+    const category = await this.categoryService.findOneByName(
+      deleteCategoryByNameDTO.categoryName,
+    );
+    if (!category) throw new NotFoundException('no category found to delete');
+    return await this.categoryService.deleteByName(
+      deleteCategoryByNameDTO.categoryName,
+    );
   }
 }
