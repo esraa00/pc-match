@@ -17,15 +17,13 @@ export class UserService {
     phoneNumber: string,
     role: Role,
   ) {
-    const userRoles = [];
-    userRoles.push(role);
     const user = this.repo.create({
       firstName,
       lastName,
       email,
       password,
       phoneNumber,
-      roles: userRoles,
+      roles: [role],
     });
     return await this.repo.save(user);
   }
