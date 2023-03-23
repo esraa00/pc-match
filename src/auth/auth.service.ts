@@ -10,33 +10,40 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { compare, hash } from 'bcrypt';
 import { LogInUserDto } from './dto/login-user.dto';
 import { CustomJwtService } from 'src/custom-jwt/custom-jwt.service';
+import { ForgetPasswordDTO } from './dto/forget-password.dto';
 import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private roleService: RoleService,
     private customJwtService: CustomJwtService,
+    private roleService: RoleService,
   ) {}
 
   async signupLocal(body: CreateUserDTO) {
     const userFound = await this.userService.findOneByEmail(body.email);
     if (userFound) throw new BadRequestException('email already in use');
-    const role = await this.roleService.findOneByName(body.role);
-    if (!role) throw new BadRequestException('role is not valid');
-
     const hashedPassword = await hash(body.password, 10);
+
+    const customerRole = await this.roleService.findOneByName('CUSTOMER');
+    if (!customerRole)
+      throw new NotFoundException("customer role doesn't exist anymore");
+
     const user = await this.userService.create(
       body.firstName,
       body.lastName,
       body.email,
       hashedPassword,
       body.phoneNumber,
-      role,
+      customerRole,
     );
-    const accessToken = this.customJwtService.signAccessToken(user.id);
-    const refreshToken = this.customJwtService.signRefreshToken(user.id);
+    const accessToken = this.customJwtService.signAccessToken({
+      userId: user.id,
+    });
+    const refreshToken = this.customJwtService.signRefreshToken({
+      userId: user.id,
+    });
     await this.updateHashedRefreshToken(user.id, refreshToken);
     return { accessToken, refreshToken };
   }
@@ -45,14 +52,15 @@ export class AuthService {
     const userFound = await this.userService.findOneByEmail(body.email);
     if (!userFound) throw new NotFoundException('user not found');
 
-    if (!userFound.isEmailConfirmed)
-      throw new UnauthorizedException('please confirm your email to login');
-
     const isPasswordMatches = await compare(body.password, userFound.password);
     if (!isPasswordMatches)
       throw new UnauthorizedException('password is incorrect');
-    const accessToken = this.customJwtService.signAccessToken(userFound.id);
-    const refreshToken = this.customJwtService.signRefreshToken(userFound.id);
+    const accessToken = this.customJwtService.signAccessToken({
+      userId: userFound.id,
+    });
+    const refreshToken = this.customJwtService.signRefreshToken({
+      userId: userFound.id,
+    });
     await this.updateHashedRefreshToken(userFound.id, refreshToken);
     return {
       accessToken,
@@ -71,12 +79,21 @@ export class AuthService {
     if (!isRefreshTokenMatches)
       throw new ForbiddenException("refresh token doesn't match");
 
-    const accessToken = this.customJwtService.signRefreshToken(user.id);
+    const accessToken = this.customJwtService.signRefreshToken({
+      userId: user.id,
+    });
     return accessToken;
   }
 
   async logout(id: number) {
     await this.nullHashedRefreshToken(id);
+  }
+
+  //TODO implement forget password
+  async forgetPassword(forgetPasswordDTO: ForgetPasswordDTO) {
+    const user = await this.userService.findOneByEmail(forgetPasswordDTO.email);
+    if (!user)
+      throw new NotFoundException("there's no user with the provided email");
   }
 
   async updateHashedRefreshToken(id: number, refreshToken: string) {
