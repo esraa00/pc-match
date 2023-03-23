@@ -19,4 +19,8 @@ export class RoleService {
   async findOneById(id: number) {
     return await this.repo.findOneBy({ id });
   }
+
+  async find() {
+    return await this.repo.find();
+  }
 }
