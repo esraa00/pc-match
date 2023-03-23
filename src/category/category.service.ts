@@ -11,4 +11,8 @@ export class CategoryService {
     const category = this.repo.create({ categoryName });
     return await this.repo.save(category);
   }
+
+  async findOneByName(categoryName: string) {
+    return await this.repo.findOneBy({ categoryName });
+  }
 }
