@@ -30,4 +30,10 @@ export class TagController {
     if (!tag) throw new NotFoundException('tag was not found');
     return await this.tagService.findOneByName(getTagByNameDTO.tagName);
   }
+
+  @Get()
+  async getAllTags() {
+    const tags = await this.tagService.find();
+    return tags;
+  }
 }
