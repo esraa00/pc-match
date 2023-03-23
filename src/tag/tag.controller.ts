@@ -5,9 +5,11 @@ import {
   Body,
   ConflictException,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { CreateTagDTO } from './dto/Create-tag.dto';
+import { DeleteTagByNameDTO } from './dto/delete-tag-by-name.dto';
 import { GetTagByNameDTO } from './dto/get-tag-by-name.dto';
 import { TagService } from './tag.service';
 
@@ -35,5 +37,12 @@ export class TagController {
   async getAllTags() {
     const tags = await this.tagService.find();
     return tags;
+  }
+
+  @Delete('/:tagName')
+  async deleteTagByName(@Param() deleteTagByNameDTO: DeleteTagByNameDTO) {
+    const tag = await this.tagService.findOneByName(deleteTagByNameDTO.tagName);
+    if (!tag) throw new NotFoundException('no tag found to delete');
+    return await this.tagService.delete(deleteTagByNameDTO.tagName);
   }
 }
