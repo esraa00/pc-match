@@ -1,6 +1,6 @@
-import { IsString } from 'class-validator';
+import { IsAlpha } from 'class-validator';
 
-export class createTagDTO {
-  @IsString()
+export class CreateTagDTO {
+  @IsAlpha()
   tagName: string;
 }
