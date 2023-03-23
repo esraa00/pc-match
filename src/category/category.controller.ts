@@ -34,4 +34,10 @@ export class CategoryController {
       getCategoryByNameDTO.categoryName,
     );
   }
+
+  @Get()
+  async getAllCategories() {
+    const categories = await this.categoryService.find();
+    return categories;
+  }
 }
