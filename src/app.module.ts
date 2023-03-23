@@ -8,6 +8,12 @@ import { EmailModule } from './email/email.module';
 import { CustomJwtModule } from './custom-jwt/custom-jwt.module';
 import { RoleModule } from './role/role.module';
 import { Role } from './role/role.entity';
+import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
+import { TagModule } from './tag/tag.module';
+import { Product } from './product/product.entity';
+import { Category } from './category/category.entity';
+import { Tag } from './tag/tag.entity';
 
 //for root => automatically be shared down into all other modules
 @Module({
@@ -27,7 +33,7 @@ import { Role } from './role/role.entity';
           database: config.get<string>('DB_NAME'),
           password: config.get<string>('DB_PASSWORD'),
           synchronize: true,
-          entities: [User, Role],
+          entities: [User, Role, Product, Category, Tag],
         };
       },
     }),
@@ -36,6 +42,9 @@ import { Role } from './role/role.entity';
     EmailModule,
     CustomJwtModule,
     RoleModule,
+    ProductModule,
+    CategoryModule,
+    TagModule,
   ],
 })
 export class AppModule {}
