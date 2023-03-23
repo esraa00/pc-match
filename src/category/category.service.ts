@@ -23,4 +23,8 @@ export class CategoryService {
   async find() {
     return await this.repo.find();
   }
+
+  async deleteByName(categoryName: string) {
+    return await this.repo.delete({ categoryName });
+  }
 }
