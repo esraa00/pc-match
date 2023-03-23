@@ -1,6 +1,15 @@
-import { Controller, Post, Body, ConflictException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  ConflictException,
+  Get,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDTO } from './dto/create-category.dto';
+import { GetCategoryByNameDTO } from './dto/get-category-by-name.dto';
 
 @Controller('category')
 export class CategoryController {
@@ -11,7 +20,18 @@ export class CategoryController {
     const isCategoryFound = await this.categoryService.findOneByName(
       createCategoryDTO.categoryName,
     );
-    if (isCategoryFound) throw new ConflictException('tag already exist');
+    if (isCategoryFound) throw new ConflictException('category already exist');
     return await this.categoryService.create(createCategoryDTO.categoryName);
+  }
+
+  @Get('/:categoryName')
+  async getCategoryByName(@Param() getCategoryByNameDTO: GetCategoryByNameDTO) {
+    const category = await this.categoryService.findOneByName(
+      getCategoryByNameDTO.categoryName,
+    );
+    if (!category) throw new NotFoundException('category was not found');
+    return await this.categoryService.findOneByName(
+      getCategoryByNameDTO.categoryName,
+    );
   }
 }
