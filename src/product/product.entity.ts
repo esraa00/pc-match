@@ -1,5 +1,6 @@
 import { Category } from 'src/category/category.entity';
 import { Tag } from 'src/tag/tag.entity';
+import { User } from 'src/user/user.entity';
 import {
   Entity,
   Column,
@@ -9,6 +10,7 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -32,13 +34,13 @@ export class Product {
   image: string;
 
   @Column({ nullable: true })
-  discountAmount: string;
+  discountAmount: number;
 
-  @Column({ default: false })
-  discountExpiryDate: boolean;
+  @Column({ type: 'timestamptz' })
+  discountExpiryDate: Date;
 
-  @Column({ unique: true, nullable: true })
-  userId: string;
+  @OneToMany(() => User, (user) => user.products)
+  user: string;
 
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
