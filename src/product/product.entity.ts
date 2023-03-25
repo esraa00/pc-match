@@ -19,7 +19,7 @@ export class Product {
   id: number;
 
   @Column()
-  name: string;
+  productName: string;
 
   @Column({ type: 'int' })
   quantity: number;
@@ -36,11 +36,11 @@ export class Product {
   @Column({ nullable: true })
   discountAmount: number;
 
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', nullable: true })
   discountExpiryDate: Date;
 
   @OneToMany(() => User, (user) => user.products)
-  user: string;
+  user: User;
 
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
