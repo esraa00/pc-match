@@ -16,6 +16,14 @@ export class TagService {
     return await this.repo.findOneBy({ tagName });
   }
 
+  // async findManyByName(tags: string[]): Promise<Tag[]> {
+  //   const foundTags = tags.map(async (tagName: string) => {
+  //     const tag = await this.findOneByName(tagName);
+  //     return tag;
+  //   });
+  //   return foundTags;
+  // }
+
   async findOneById(id: number) {
     return await this.repo.findOneBy({ id });
   }

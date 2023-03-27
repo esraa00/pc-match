@@ -1,5 +1,9 @@
-import { Cart } from 'src/cart/cart.entity';
+import { Answer } from 'src/answer/answer.entity';
+import { Cart } from 'src/cart/entities/cart.entity';
+import { FavoriteList } from 'src/favorite-list/entities/favorite-list.entity';
+import { Question } from 'src/question/question.entity';
 import { Product } from 'src/product/product.entity';
+import { Vote } from 'src/vote/vote.entity';
 import { Role } from 'src/role/role.entity';
 import {
   Entity,
@@ -60,6 +64,18 @@ export class User {
 
   @OneToOne(() => Cart, (cart) => cart.user)
   cart: Cart;
+
+  @OneToOne(() => FavoriteList, (favoriteList) => favoriteList.user)
+  favoriteList: FavoriteList;
+
+  @OneToMany(() => Question, (question) => question.user)
+  questions: Question[];
+
+  @OneToMany(() => Answer, (answer) => answer.user)
+  answers: Answer[];
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 
   @CreateDateColumn()
   createdAt: Date;

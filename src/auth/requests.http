@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "firstName":"mai",
   "lastName":"Mohamed",
-  "email":"esraa@gmail.com",
+  "email":"esrafa@gmail.com",
   "phoneNumber":"01270304453",
   "password":"Esraaguest5056@"
 }
@@ -20,3 +20,10 @@ Content-Type: application/json
   "email":"esraa@gmail.com",
   "password":"Esraaguest5056@"
 }
+
+### logout user
+
+Post http://localhost:3000/auth/logout
+
+
+### refresh accessToken

@@ -1,4 +1,6 @@
+import { CartItem } from 'src/cart/entities/cart-item.entity';
 import { Category } from 'src/category/category.entity';
+import { Question } from 'src/question/question.entity';
 import { Tag } from 'src/tag/tag.entity';
 import { User } from 'src/user/user.entity';
 import {
@@ -39,7 +41,7 @@ export class Product {
   @Column({ type: 'timestamptz', nullable: true })
   discountExpiryDate: Date;
 
-  @OneToMany(() => User, (user) => user.products)
+  @ManyToOne(() => User, (user) => user.id)
   user: User;
 
   @ManyToOne(() => Category, (category) => category.products)
@@ -48,6 +50,13 @@ export class Product {
   @ManyToMany(() => Tag)
   @JoinTable({ name: 'product_tag' })
   tags: Tag[];
+
+  @OneToMany(() => Question, (question) => question.product)
+  questions: Question[];
+
+  @ManyToMany(() => User)
+  @JoinTable({ name: 'product_subscribers' })
+  subscribers: User[];
 
   @CreateDateColumn()
   createdAt: Date;

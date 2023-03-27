@@ -8,6 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
+import { Roles } from 'src/decorators';
 import { CreateTagDTO } from './dto/Create-tag.dto';
 import { DeleteTagByNameDTO } from './dto/delete-tag-by-name.dto';
 import { GetTagByNameDTO } from './dto/get-tag-by-name.dto';
@@ -34,6 +35,7 @@ export class TagController {
   }
 
   @Get()
+  @Roles(['admin'])
   async getAllTags() {
     const tags = await this.tagService.find();
     return tags;

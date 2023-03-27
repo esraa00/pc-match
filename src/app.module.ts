@@ -17,6 +17,17 @@ import { Tag } from './tag/tag.entity';
 import { CartModule } from './cart/cart.module';
 import { Cart } from './cart/entities/cart.entity';
 import { CartItem } from './cart/entities/cart-item.entity';
+import { FavoriteListModule } from './favorite-list/favorite-list.module';
+import { FavoriteList } from './favorite-list/entities/favorite-list.entity';
+import { ProductQuestionsModule } from './question/question.module';
+import { AnswerModule } from './answer/answer.module';
+import { Answer } from './answer/answer.entity';
+import { ProductRatingModule } from './product-rating/product-rating.module';
+import { ProductRating } from './product-rating/product-rating.entity';
+import { QuestionsVotingModule } from './vote/vote.module';
+import { Question } from './question/question.entity';
+import { Vote } from './vote/vote.entity';
+import { VoteTypeModule } from './vote-type/vote-type.module';
 
 //for root => automatically be shared down into all other modules
 @Module({
@@ -36,7 +47,20 @@ import { CartItem } from './cart/entities/cart-item.entity';
           database: config.get<string>('DB_NAME'),
           password: config.get<string>('DB_PASSWORD'),
           synchronize: true,
-          entities: [User, Role, Product, Category, Tag, Cart, CartItem],
+          entities: [
+            User,
+            Role,
+            Product,
+            Category,
+            Tag,
+            Cart,
+            CartItem,
+            FavoriteList,
+            Question,
+            Answer,
+            Vote,
+            ProductRating,
+          ],
         };
       },
     }),
@@ -49,6 +73,12 @@ import { CartItem } from './cart/entities/cart-item.entity';
     CategoryModule,
     TagModule,
     CartModule,
+    FavoriteListModule,
+    ProductQuestionsModule,
+    AnswerModule,
+    ProductRatingModule,
+    QuestionsVotingModule,
+    VoteTypeModule,
   ],
 })
 export class AppModule {}
