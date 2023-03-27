@@ -6,7 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
+import { CartItem } from './cart-item.entity';
 
 @Entity()
 export class Cart {
@@ -18,6 +20,9 @@ export class Cart {
 
   @Column({ type: 'double precision' })
   totalPrice: number;
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart)
+  cartItems: CartItem[];
 
   @CreateDateColumn()
   createdAt: Date;
