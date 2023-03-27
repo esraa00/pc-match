@@ -14,6 +14,8 @@ import { TagModule } from './tag/tag.module';
 import { Product } from './product/product.entity';
 import { Category } from './category/category.entity';
 import { Tag } from './tag/tag.entity';
+import { CartModule } from './cart/cart.module';
+import { Cart } from './cart/cart.entity';
 
 //for root => automatically be shared down into all other modules
 @Module({
@@ -33,7 +35,7 @@ import { Tag } from './tag/tag.entity';
           database: config.get<string>('DB_NAME'),
           password: config.get<string>('DB_PASSWORD'),
           synchronize: true,
-          entities: [User, Role, Product, Category, Tag],
+          entities: [User, Role, Product, Category, Tag, Cart],
         };
       },
     }),
@@ -45,6 +47,7 @@ import { Tag } from './tag/tag.entity';
     ProductModule,
     CategoryModule,
     TagModule,
+    CartModule,
   ],
 })
 export class AppModule {}
