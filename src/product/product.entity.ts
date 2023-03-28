@@ -30,7 +30,7 @@ export class Product {
   price: number;
 
   @Column({ type: 'json' })
-  specifications: string;
+  specifications: Record<string, any>;
 
   @Column()
   image: string;
