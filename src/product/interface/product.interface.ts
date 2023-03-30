@@ -2,7 +2,7 @@ import { Category } from 'src/category/category.entity';
 import { Tag } from 'src/tag/tag.entity';
 import { User } from 'src/user/user.entity';
 
-export interface Product {
+export interface IProduct {
   productName: string;
   quantity: number;
   price: number;

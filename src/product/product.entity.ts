@@ -1,6 +1,4 @@
-import { CartItem } from 'src/cart/entities/cart-item.entity';
 import { Category } from 'src/category/category.entity';
-import { Question } from 'src/question/question.entity';
 import { Tag } from 'src/tag/tag.entity';
 import { User } from 'src/user/user.entity';
 import {
@@ -12,7 +10,7 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
-  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -29,30 +27,29 @@ export class Product {
   @Column({ type: 'double precision' })
   price: number;
 
-  @Column({ type: 'json' })
+  @Column({ type: 'json', nullable: true })
   specifications: Record<string, any>;
 
   @Column()
   image: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'double precision' })
   discountAmount: number;
 
   @Column({ type: 'timestamptz', nullable: true })
   discountExpiryDate: Date;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User)
+  @JoinColumn({ referencedColumnName: 'id' })
   user: User;
 
-  @ManyToOne(() => Category, (category) => category.products)
+  @ManyToOne(() => Category)
+  @JoinColumn({ referencedColumnName: 'id' })
   category: Category;
 
   @ManyToMany(() => Tag)
   @JoinTable({ name: 'product_tag' })
   tags: Tag[];
-
-  @OneToMany(() => Question, (question) => question.product)
-  questions: Question[];
 
   @ManyToMany(() => User)
   @JoinTable({ name: 'product_subscribers' })

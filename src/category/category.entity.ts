@@ -16,9 +16,6 @@ export class Category {
   @Column({ unique: true, nullable: false })
   categoryName: string;
 
-  @OneToMany(() => Product, (product) => product.category)
-  products: Product;
-
   @CreateDateColumn()
   createdAt: Date;
 

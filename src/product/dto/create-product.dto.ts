@@ -1,4 +1,11 @@
-import { IsDate, IsInt, IsJSON, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsInt,
+  IsJSON,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class createProductDTO {
   @IsString()
@@ -11,7 +18,7 @@ export class createProductDTO {
   price: number;
 
   @IsJSON()
-  specifications: string;
+  specifications: Record<string, any>;
 
   @IsString()
   image: string;
@@ -19,12 +26,12 @@ export class createProductDTO {
   @IsNumber()
   discountAmount: number;
 
-  @IsDate()
-  discountExpiryDate: Date;
+  @IsString()
+  discountExpiryDate: string;
 
   @IsString()
   category: string;
 
-  @IsString()
+  @IsArray()
   tags: [string];
 }

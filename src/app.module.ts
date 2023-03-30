@@ -22,12 +22,18 @@ import { FavoriteList } from './favorite-list/entities/favorite-list.entity';
 import { ProductQuestionsModule } from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
 import { Answer } from './answer/answer.entity';
-import { ProductRatingModule } from './product-rating/product-rating.module';
-import { ProductRating } from './product-rating/product-rating.entity';
 import { QuestionsVotingModule } from './vote/vote.module';
 import { Question } from './question/question.entity';
 import { Vote } from './vote/vote.entity';
 import { VoteTypeModule } from './vote-type/vote-type.module';
+import { VoteType } from './vote-type/vote-type.entity';
+import { Rate } from './rate/rate.entity';
+import { RateModule } from './rate/rate.module';
+import { OrderModule } from './order/order.module';
+import { PaymentTypeModule } from './payment-type/payment-type.module';
+import { OrderStatusModule } from './order-status/order-status.module';
+import { InvoiceTypeModule } from './invoice-type/invoice-type.module';
+import { OrderItemModule } from './order-item/order-item.module';
 
 //for root => automatically be shared down into all other modules
 @Module({
@@ -59,7 +65,8 @@ import { VoteTypeModule } from './vote-type/vote-type.module';
             Question,
             Answer,
             Vote,
-            ProductRating,
+            Rate,
+            VoteType,
           ],
         };
       },
@@ -76,9 +83,14 @@ import { VoteTypeModule } from './vote-type/vote-type.module';
     FavoriteListModule,
     ProductQuestionsModule,
     AnswerModule,
-    ProductRatingModule,
+    RateModule,
     QuestionsVotingModule,
     VoteTypeModule,
+    OrderModule,
+    PaymentTypeModule,
+    OrderStatusModule,
+    InvoiceTypeModule,
+    OrderItemModule,
   ],
 })
 export class AppModule {}

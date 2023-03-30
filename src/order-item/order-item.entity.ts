@@ -1,31 +1,36 @@
+import { OrderStatus } from 'src/order-status/order-status.entity';
+import { Order } from 'src/order/order.entity';
+import { PaymentType } from 'src/payment-type/payment-type.entity';
 import { Product } from 'src/product/product.entity';
+import { User } from 'src/user/user.entity';
 import {
   Entity,
-  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
+  Column,
   JoinColumn,
 } from 'typeorm';
-import { Cart } from './cart.entity';
 
 @Entity()
-export class CartItem {
+export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Cart)
+  @Column({ type: 'int' })
+  quantity: number;
+
+  @Column({ type: 'double precision' })
+  price: number;
+
+  @ManyToOne(() => Order)
   @JoinColumn({ referencedColumnName: 'id' })
-  cart: Cart;
+  order: Order;
 
   @ManyToOne(() => Product)
   @JoinColumn({ referencedColumnName: 'id' })
   product: Product;
-
-  @Column({ type: 'int' })
-  quantity: number;
 
   @CreateDateColumn()
   createdAt: Date;

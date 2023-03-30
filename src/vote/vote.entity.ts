@@ -18,7 +18,7 @@ export class Vote {
   @ManyToOne(() => User, (user) => user.votes)
   user: User;
 
-  @ManyToOne(() => Question, (question) => question.votes)
+  @ManyToOne(() => Question)
   question: Question;
 
   @OneToMany(() => VoteType, (voteType) => voteType.votes)

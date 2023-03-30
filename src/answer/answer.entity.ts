@@ -14,10 +14,10 @@ export class Answer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Question, (question) => question.answers)
+  @ManyToOne(() => Question)
   question: Question;
 
-  @ManyToOne(() => User, (user) => user.answers)
+  @ManyToOne(() => User)
   user: User;
 
   @Column()

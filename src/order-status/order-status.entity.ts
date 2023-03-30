@@ -1,25 +1,18 @@
-import { User } from 'src/user/user.entity';
 import {
   Entity,
-  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
+  Column,
 } from 'typeorm';
 
 @Entity()
-export class Cart {
+export class OrderStatus {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User)
-  @JoinColumn({ referencedColumnName: 'id' })
-  user: User;
-
-  @Column({ type: 'double precision' })
-  totalPrice: number;
+  @Column()
+  status: string;
 
   @CreateDateColumn()
   createdAt: Date;

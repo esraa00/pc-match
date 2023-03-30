@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Tag } from './tag.entity';
 
 @Injectable()
@@ -13,7 +13,10 @@ export class TagService {
   }
 
   async findOneByName(tagName: string) {
-    return await this.repo.findOneBy({ tagName });
+    console.log(tagName);
+    const tag = await this.repo.findOneBy({ tagName });
+    console.log(tag);
+    return tag;
   }
 
   // async findManyByName(tags: string[]): Promise<Tag[]> {
@@ -23,6 +26,11 @@ export class TagService {
   //   });
   //   return foundTags;
   // }
+
+  async findManyByName(tag: string[]) {
+    const foundTags = await this.repo.find({ where: { tagName: In(tag) } });
+    return foundTags;
+  }
 
   async findOneById(id: number) {
     return await this.repo.findOneBy({ id });
