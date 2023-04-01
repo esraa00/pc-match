@@ -1,9 +1,5 @@
-import { Answer } from 'src/answer/answer.entity';
-import { Cart } from 'src/cart/entities/cart.entity';
-import { FavoriteList } from 'src/favorite-list/entities/favorite-list.entity';
-import { Question } from 'src/question/question.entity';
-import { Product } from 'src/product/product.entity';
-import { Vote } from 'src/vote/vote.entity';
+// import { Cart } from 'src/cart/entities/cart.entity';
+// import { FavoriteList } from 'src/favorite-list/entities/favorite-list.entity';
 import { Role } from 'src/role/role.entity';
 import {
   Entity,
@@ -13,8 +9,8 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
-  OneToMany,
-  OneToOne,
+  // OneToOne,
+  // JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -59,24 +55,23 @@ export class User {
   @JoinTable({ name: 'users_roles' })
   roles: Role[];
 
-  @OneToMany(() => Product, (product) => product.user)
-  products: Product[];
-
-  @OneToOne(() => FavoriteList, (favoriteList) => favoriteList.user)
-  favoriteList: FavoriteList;
-
-  @OneToMany(() => Question, (question) => question.user)
-  questions: Question[];
-
-  @OneToMany(() => Answer, (answer) => answer.user)
-  answers: Answer[];
-
-  @OneToMany(() => Vote, (vote) => vote.user)
-  votes: Vote[];
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // @OneToOne(() => Cart)
+  // @JoinColumn()
+  // cart: Cart;
+
+  // @OneToOne(() => FavoriteList)
+  // @JoinColumn()
+  // favoriteList: FavoriteList;
+
+  // @Column()
+  // cartId: number;
+
+  // @Column()
+  // favoriteListId: number;
 }

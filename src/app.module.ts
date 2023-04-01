@@ -15,11 +15,10 @@ import { Product } from './product/product.entity';
 import { Category } from './category/category.entity';
 import { Tag } from './tag/tag.entity';
 import { CartModule } from './cart/cart.module';
-import { Cart } from './cart/entities/cart.entity';
-import { CartItem } from './cart/entities/cart-item.entity';
-import { FavoriteListModule } from './favorite-list/favorite-list.module';
-import { FavoriteList } from './favorite-list/entities/favorite-list.entity';
-import { ProductQuestionsModule } from './question/question.module';
+// import { Cart } from './cart/entities/cart.entity';
+import { CartItem } from './cart/cart-item.entity';
+// import { FavoriteList } from './favorite-list/entities/favorite-list.entity';
+import * as questionModule from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
 import { Answer } from './answer/answer.entity';
 import { QuestionsVotingModule } from './vote/vote.module';
@@ -59,9 +58,9 @@ import { OrderItemModule } from './order-item/order-item.module';
             Product,
             Category,
             Tag,
-            Cart,
+            // Cart,
             CartItem,
-            FavoriteList,
+            // FavoriteList,
             Question,
             Answer,
             Vote,
@@ -72,16 +71,15 @@ import { OrderItemModule } from './order-item/order-item.module';
       },
     }),
     UserModule,
+    ProductModule,
     AuthModule,
     EmailModule,
     CustomJwtModule,
     RoleModule,
-    ProductModule,
     CategoryModule,
     TagModule,
     CartModule,
-    FavoriteListModule,
-    ProductQuestionsModule,
+    questionModule.ProductQuestionsModule,
     AnswerModule,
     RateModule,
     QuestionsVotingModule,

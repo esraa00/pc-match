@@ -4,10 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { Role } from 'src/role/role.entity';
+// import { CartService } from 'src/cart/services/cart.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private repo: Repository<User>, // private readonly cartService: CartService,
+  ) {}
 
   async create(
     firstName: string,
@@ -17,6 +20,8 @@ export class UserService {
     phoneNumber: string,
     role: Role,
   ) {
+    // const cart = await this.cartService.create();
+    // const favoriteList = await this.favoriteListService.create();
     const user = this.repo.create({
       firstName,
       lastName,
@@ -24,6 +29,10 @@ export class UserService {
       password,
       phoneNumber,
       roles: [role],
+      // cartId: cart.id,
+      // favoriteListId: favoriteList.id,
+      // cart,
+      // favoriteList,
     });
     return await this.repo.save(user);
   }
@@ -38,7 +47,7 @@ export class UserService {
 
   async update(id: number, data: Partial<User>) {
     const userFound = await this.findOneById(id);
-    if (!userFound) throw new NotFoundException('user  not found');
+    if (!userFound) throw new NotFoundException('user not found');
     Object.assign(userFound, data);
     return await this.repo.save(userFound);
   }

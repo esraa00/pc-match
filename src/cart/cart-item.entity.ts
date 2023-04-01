@@ -1,4 +1,5 @@
 import { Product } from 'src/product/product.entity';
+import { User } from 'src/user/user.entity';
 import {
   Entity,
   Column,
@@ -6,26 +7,30 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { Cart } from './cart.entity';
 
 @Entity()
 export class CartItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Cart)
-  @JoinColumn({ referencedColumnName: 'id' })
-  cart: Cart;
+  @ManyToOne(() => User)
+  @JoinColumn()
+  user: User;
 
   @ManyToOne(() => Product)
-  @JoinColumn({ referencedColumnName: 'id' })
+  @JoinColumn()
   product: Product;
 
   @Column({ type: 'int' })
   quantity: number;
+
+  @Column()
+  productId: number;
+
+  @Column()
+  userId: number;
 
   @CreateDateColumn()
   createdAt: Date;

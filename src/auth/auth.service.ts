@@ -55,6 +55,7 @@ export class AuthService {
     const isPasswordMatches = await compare(body.password, userFound.password);
     if (!isPasswordMatches)
       throw new UnauthorizedException('password is incorrect');
+    console.log(userFound);
     const accessToken = this.customJwtService.signAccessToken({
       userId: userFound.id,
     });
