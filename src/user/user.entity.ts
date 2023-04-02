@@ -1,5 +1,4 @@
-// import { Cart } from 'src/cart/entities/cart.entity';
-// import { FavoriteList } from 'src/favorite-list/entities/favorite-list.entity';
+import { Product } from 'src/product/product.entity';
 import { Role } from 'src/role/role.entity';
 import {
   Entity,
@@ -9,8 +8,6 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
-  // OneToOne,
-  // JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -55,23 +52,13 @@ export class User {
   @JoinTable({ name: 'users_roles' })
   roles: Role[];
 
+  @ManyToMany(() => Product)
+  @JoinTable({ name: 'favorite_list_items' })
+  favorites: Product[];
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  // @OneToOne(() => Cart)
-  // @JoinColumn()
-  // cart: Cart;
-
-  // @OneToOne(() => FavoriteList)
-  // @JoinColumn()
-  // favoriteList: FavoriteList;
-
-  // @Column()
-  // cartId: number;
-
-  // @Column()
-  // favoriteListId: number;
 }

@@ -20,8 +20,6 @@ export class UserService {
     phoneNumber: string,
     role: Role,
   ) {
-    // const cart = await this.cartService.create();
-    // const favoriteList = await this.favoriteListService.create();
     const user = this.repo.create({
       firstName,
       lastName,
@@ -29,10 +27,6 @@ export class UserService {
       password,
       phoneNumber,
       roles: [role],
-      // cartId: cart.id,
-      // favoriteListId: favoriteList.id,
-      // cart,
-      // favoriteList,
     });
     return await this.repo.save(user);
   }
@@ -43,6 +37,10 @@ export class UserService {
 
   async findOneById(id: number) {
     return await this.repo.findOneBy({ id });
+  }
+
+  async findOneByIdWithJoin(id: number) {
+    return await this.repo.findOne({ relations: ['favorites'], where: { id } });
   }
 
   async update(id: number, data: Partial<User>) {
@@ -57,5 +55,9 @@ export class UserService {
     if (!userFound) throw new NotFoundException('user not found');
     userFound.isEmailConfirmed = true;
     return await this.repo.save(userFound);
+  }
+
+  async saveUser(user: User) {
+    await this.repo.save(user);
   }
 }

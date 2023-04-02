@@ -1,27 +1,61 @@
-// import { Injectable } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-// // import { ProductService } from 'src/product/product.service';
-// import { FavoriteList } from './entities/favorite-list.entity';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { Product } from 'src/product/product.entity';
+import { ProductService } from 'src/product/product.service';
+import { User } from 'src/user/user.entity';
+import { UserService } from 'src/user/user.service';
 
-// @Injectable()
-// export class FavoriteListService {
-//   constructor(
-//     @InjectRepository(FavoriteList) private repo: Repository<FavoriteList>,
-//   ) // private readonly productService: ProductService,
-//   {}
-//   async create() {
-//     const favoriteList = this.repo.create();
-//     return await this.repo.save(favoriteList);
-//   }
+@Injectable()
+export class FavoriteListService {
+  constructor(
+    private readonly userService: UserService,
+    private readonly productService: ProductService,
+  ) {}
 
-//   async findOneById(id: number) {
-//     return await this.repo.findOneBy({ id });
-//   }
+  async addToFavorites(userId: number, productId: number) {
+    const user = await this.userService.findOneByIdWithJoin(userId);
+    const product = await this.productService.findOneById(productId);
 
-//   // async addToFavoriteList(productId: number, favoriteListId: number) {
-//   //   const favoriteList = await this.findOneById(favoriteListId);
-//   //   const product = await this.productService.findOneById(productId);
-//   //   favoriteList.favoriteListItems.push(product);
-//   // }
-// }
+    if (this.isProductInFavorites(user, product)) {
+      throw new ConflictException('product is already in your favorites');
+    }
+    user.favorites.push(product);
+    return await this.userService.saveUser(user);
+  }
+
+  async deleteFromFavorites(userId: number, productId: number) {
+    const user = await this.userService.findOneByIdWithJoin(userId);
+    const product = await this.productService.findOneById(productId);
+
+    if (!this.isProductInFavorites(user, product))
+      throw new NotFoundException('product is not in favorites to delete it');
+
+    const newFavorites = this.excludeProductFromFavorites(user, product);
+    user.favorites = newFavorites;
+    return await this.userService.saveUser(user);
+  }
+
+  async getAllFavorites(userId: number) {
+    const user = await this.userService.findOneByIdWithJoin(userId);
+    return user.favorites;
+  }
+
+  excludeProductFromFavorites(user: User, product: Product) {
+    const favorites = (user.favorites = user.favorites.filter(
+      (favoriteItem) => {
+        return favoriteItem.id != product.id;
+      },
+    ));
+    return favorites;
+  }
+
+  isProductInFavorites(user: User, product: Product): Product {
+    const [productFound] = user.favorites.filter((favoriteListItem) => {
+      if (favoriteListItem.id == product.id) return favoriteListItem;
+    });
+    return productFound;
+  }
+}

@@ -33,6 +33,7 @@ import { PaymentTypeModule } from './payment-type/payment-type.module';
 import { OrderStatusModule } from './order-status/order-status.module';
 import { InvoiceTypeModule } from './invoice-type/invoice-type.module';
 import { OrderItemModule } from './order-item/order-item.module';
+import { FavoriteListModule } from './favorite-list/favorite-list.module';
 
 //for root => automatically be shared down into all other modules
 @Module({
@@ -58,9 +59,7 @@ import { OrderItemModule } from './order-item/order-item.module';
             Product,
             Category,
             Tag,
-            // Cart,
             CartItem,
-            // FavoriteList,
             Question,
             Answer,
             Vote,
@@ -85,6 +84,7 @@ import { OrderItemModule } from './order-item/order-item.module';
     QuestionsVotingModule,
     VoteTypeModule,
     OrderModule,
+    FavoriteListModule,
     PaymentTypeModule,
     OrderStatusModule,
     InvoiceTypeModule,

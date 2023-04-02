@@ -11,7 +11,7 @@ export class CartController {
     return await this.cartItemService.find(userId);
   }
 
-  @Post(':userId')
+  @Post('/')
   async addToCart(@Body() body: AddToCartDTO) {
     return await this.cartItemService.create(
       body.userId,
