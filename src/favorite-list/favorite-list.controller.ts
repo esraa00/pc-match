@@ -12,9 +12,8 @@ import { UseAccessTokenGuard } from 'src/guards';
 import { GetCurrentUser } from 'src/decorators';
 import { AddToFavoritesDTO } from './dto/add-to-favorites.dto';
 import { DeleteFromFavoritesDTO } from './dto/delete-from-favorites.dto';
-import { GetAllFavoritesDTO } from './dto/get-all-favorites.dto';
 
-@Controller('favorite-list')
+@Controller('favorites')
 export class FavoriteListController {
   constructor(private readonly favoriteListService: FavoriteListService) {}
 
@@ -31,29 +30,20 @@ export class FavoriteListController {
   }
 
   @UseAccessTokenGuard()
-  @Delete('/:productId')
+  @Delete('/:id')
   async deleteFromFavorites(
     @GetCurrentUser('userId') currentUserId: number,
     @Param() deleteFromFavoritesDTO: DeleteFromFavoritesDTO,
   ) {
     return await this.favoriteListService.deleteFromFavorites(
       currentUserId,
-      deleteFromFavoritesDTO.productId,
+      deleteFromFavoritesDTO.id,
     );
   }
 
   @UseAccessTokenGuard()
-  @Get('/:userId')
-  async getAllFavorites(
-    @GetCurrentUser('userId') currentUserId: number,
-    @Param() getAllFavoritesDTO: GetAllFavoritesDTO,
-  ) {
-    if (getAllFavoritesDTO.userId != currentUserId)
-      throw new UnauthorizedException(
-        'this is not your favorite list , stop playing',
-      );
-    return await this.favoriteListService.getAllFavorites(
-      getAllFavoritesDTO.userId,
-    );
+  @Get('/')
+  async getAllFavorites(@GetCurrentUser('userId') currentUserId: number) {
+    return await this.favoriteListService.getAllFavorites(currentUserId);
   }
 }
