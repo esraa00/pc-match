@@ -12,6 +12,7 @@ import { UseAccessTokenGuard } from 'src/guards';
 import { GetCurrentUser } from 'src/decorators';
 import { AddToFavoritesDTO } from './dto/add-to-favorites.dto';
 import { DeleteFromFavoritesDTO } from './dto/delete-from-favorites.dto';
+import { GetAllFavoritesDTO } from './dto/get-all-favorites.dto';
 
 @Controller('favorite-list')
 export class FavoriteListController {
@@ -45,12 +46,14 @@ export class FavoriteListController {
   @Get('/:userId')
   async getAllFavorites(
     @GetCurrentUser('userId') currentUserId: number,
-    @Param('userId') userId: number,
+    @Param() getAllFavoritesDTO: GetAllFavoritesDTO,
   ) {
-    if (userId != currentUserId)
+    if (getAllFavoritesDTO.userId != currentUserId)
       throw new UnauthorizedException(
         'this is not your favorite list , stop playing',
       );
-    return await this.favoriteListService.getAllFavorites(userId);
+    return await this.favoriteListService.getAllFavorites(
+      getAllFavoritesDTO.userId,
+    );
   }
 }
