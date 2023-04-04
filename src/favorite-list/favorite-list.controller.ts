@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { FavoriteListService } from './favorite-list.service';
 import { UseAccessTokenGuard } from 'src/guards';
 import { GetCurrentUser } from 'src/decorators';

@@ -1,39 +1,36 @@
 import { Product } from 'src/product/product.entity';
-import { User } from 'src/user/user.entity';
 import {
   Entity,
+  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  Column,
   JoinColumn,
 } from 'typeorm';
+import { Cart } from './cart.entity';
 
 @Entity()
-export class Rate {
+export class CartItem {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => Cart)
+  @JoinColumn()
+  cart: Cart;
 
   @ManyToOne(() => Product)
   @JoinColumn()
   product: Product;
 
-  @ManyToOne(() => User)
-  @JoinColumn()
-  user: User;
-
-  @Column()
-  userId: number;
+  @Column({ type: 'int' })
+  quantity: number;
 
   @Column()
   productId: number;
 
-  @Column({ type: 'int' })
-  rate: Number;
-
   @Column()
-  comment: String;
+  cartId: number;
 
   @CreateDateColumn()
   createdAt: Date;

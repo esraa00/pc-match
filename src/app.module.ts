@@ -16,7 +16,7 @@ import { Category } from './category/category.entity';
 import { Tag } from './tag/tag.entity';
 import { CartModule } from './cart/cart.module';
 // import { Cart } from './cart/entities/cart.entity';
-import { CartItem } from './cart/cart-item.entity';
+import { CartItem } from './cart/entity/cart-item.entity';
 // import { FavoriteList } from './favorite-list/entities/favorite-list.entity';
 import * as questionModule from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
@@ -34,6 +34,7 @@ import { OrderStatusModule } from './order-status/order-status.module';
 import { InvoiceTypeModule } from './invoice-type/invoice-type.module';
 import { OrderItemModule } from './order-item/order-item.module';
 import { FavoriteListModule } from './favorite-list/favorite-list.module';
+import { Cart } from './cart/entity/cart.entity';
 
 //for root => automatically be shared down into all other modules
 @Module({
@@ -59,6 +60,7 @@ import { FavoriteListModule } from './favorite-list/favorite-list.module';
             Product,
             Category,
             Tag,
+            Cart,
             CartItem,
             Question,
             Answer,

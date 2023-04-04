@@ -4,13 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { Role } from 'src/role/role.entity';
-// import { CartService } from 'src/cart/services/cart.service';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User) private repo: Repository<User>, // private readonly cartService: CartService,
-  ) {}
+  constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   async create(
     firstName: string,

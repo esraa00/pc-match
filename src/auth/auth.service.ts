@@ -16,9 +16,9 @@ import { RoleService } from 'src/role/role.service';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private customJwtService: CustomJwtService,
-    private roleService: RoleService,
+    private readonly userService: UserService,
+    private readonly customJwtService: CustomJwtService,
+    private readonly roleService: RoleService,
   ) {}
 
   async signupLocal(body: CreateUserDTO) {
@@ -55,7 +55,7 @@ export class AuthService {
     const isPasswordMatches = await compare(body.password, userFound.password);
     if (!isPasswordMatches)
       throw new UnauthorizedException('password is incorrect');
-    console.log(userFound);
+
     const accessToken = this.customJwtService.signAccessToken({
       userId: userFound.id,
     });

@@ -1,33 +1,24 @@
-import { Product } from 'src/product/product.entity';
 import { User } from 'src/user/user.entity';
 import {
   Entity,
-  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
   JoinColumn,
+  OneToOne,
+  Column,
 } from 'typeorm';
 
 @Entity()
-export class CartItem {
+export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
+  @OneToOne(() => User, (user) => user.cart, {
+    cascade: ['insert', 'update'],
+  })
   @JoinColumn()
   user: User;
-
-  @ManyToOne(() => Product)
-  @JoinColumn()
-  product: Product;
-
-  @Column({ type: 'int' })
-  quantity: number;
-
-  @Column()
-  productId: number;
 
   @Column()
   userId: number;
