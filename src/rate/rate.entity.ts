@@ -8,9 +8,11 @@ import {
   ManyToOne,
   Column,
   JoinColumn,
+  Index,
 } from 'typeorm';
 
 @Entity()
+@Index(['userId', 'productId'], { unique: true })
 export class Rate {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,7 +21,7 @@ export class Rate {
   @JoinColumn()
   product: Product;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.rates)
   @JoinColumn()
   user: User;
 
@@ -30,10 +32,10 @@ export class Rate {
   productId: number;
 
   @Column({ type: 'int' })
-  rate: Number;
+  rate: number;
 
   @Column()
-  comment: String;
+  comment: string;
 
   @CreateDateColumn()
   createdAt: Date;

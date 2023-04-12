@@ -18,7 +18,7 @@ import { CartModule } from './cart/cart.module';
 // import { Cart } from './cart/entities/cart.entity';
 import { CartItem } from './cart/entity/cart-item.entity';
 // import { FavoriteList } from './favorite-list/entities/favorite-list.entity';
-import * as questionModule from './question/question.module';
+import { QuestionsModule } from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
 import { Answer } from './answer/answer.entity';
 import { QuestionsVotingModule } from './vote/vote.module';
@@ -80,7 +80,7 @@ import { Cart } from './cart/entity/cart.entity';
     CategoryModule,
     TagModule,
     CartModule,
-    questionModule.ProductQuestionsModule,
+    QuestionsModule,
     AnswerModule,
     RateModule,
     QuestionsVotingModule,

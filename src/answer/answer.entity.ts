@@ -21,7 +21,7 @@ export class Answer {
   user: User;
 
   @Column()
-  answer: String;
+  answer: string;
 
   @CreateDateColumn()
   createdAt: Date;

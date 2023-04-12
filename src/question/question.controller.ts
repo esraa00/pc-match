@@ -1,4 +1,11 @@
 import { Controller } from '@nestjs/common';
+import { ProductService } from 'src/product/product.service';
+import { UserService } from 'src/user/user.service';
 
-@Controller('product-questions')
-export class QuestionController {}
+@Controller('questions')
+export class QuestionController {
+  constructor(
+    private readonly userService: UserService,
+    private readonly productService: ProductService,
+  ) {}
+}

@@ -16,15 +16,15 @@ export class Question {
   id: number;
 
   @ManyToOne(() => Product)
-  @JoinColumn({ referencedColumnName: 'id' })
+  @JoinColumn()
   product: Product;
 
   @ManyToOne(() => User)
-  @JoinColumn({ referencedColumnName: 'id' })
+  @JoinColumn()
   user: User;
 
   @Column()
-  question: String;
+  question: string;
 
   @CreateDateColumn()
   createdAt: Date;
