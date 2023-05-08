@@ -1,7 +1,6 @@
 import { InvoiceType } from 'src/invoice-type/invoice-type.entity';
 import { OrderStatus } from 'src/order-status/order-status.entity';
 import { PaymentType } from 'src/payment-type/payment-type.entity';
-import { Product } from 'src/product/product.entity';
 import { User } from 'src/user/user.entity';
 import {
   Entity,
