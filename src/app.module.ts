@@ -35,6 +35,9 @@ import { InvoiceTypeModule } from './invoice-type/invoice-type.module';
 import { OrderItemModule } from './order-item/order-item.module';
 import { FavoriteListModule } from './favorite-list/favorite-list.module';
 import { Cart } from './cart/entity/cart.entity';
+import { OrderStatus } from './order-status/order-status.entity';
+import { InvoiceType } from './invoice-type/invoice-type.entity';
+import { PaymentType } from './payment-type/payment-type.entity';
 
 //for root => automatically be shared down into all other modules
 @Module({
@@ -66,7 +69,10 @@ import { Cart } from './cart/entity/cart.entity';
             Answer,
             Vote,
             Rate,
+            OrderStatus,
             VoteType,
+            InvoiceType,
+            PaymentType,
           ],
         };
       },
@@ -90,7 +96,9 @@ import { Cart } from './cart/entity/cart.entity';
     PaymentTypeModule,
     OrderStatusModule,
     InvoiceTypeModule,
+    OrderStatusModule,
     OrderItemModule,
+    InvoiceTypeModule,
   ],
 })
 export class AppModule {}

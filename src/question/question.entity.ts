@@ -19,9 +19,15 @@ export class Question {
   @JoinColumn()
   product: Product;
 
+  @Column()
+  productId: number;
+
   @ManyToOne(() => User)
   @JoinColumn()
   user: User;
+
+  @Column()
+  userId: number;
 
   @Column()
   question: string;

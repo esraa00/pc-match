@@ -63,7 +63,7 @@ export class User {
   roles: Role[];
 
   @ManyToMany(() => Product)
-  @JoinTable({ name: 'favorite_list_items' })
+  @JoinTable({ name: 'favorites' })
   favorites: Product[];
 
   @CreateDateColumn()

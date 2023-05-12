@@ -17,7 +17,10 @@ export class FavoriteListService {
 
   async addToFavorites(userId: number, productId: number) {
     const user = await this.userService.findOneByIdWithJoin(userId);
+    if (!user) throw new NotFoundException('user was not found');
+
     const product = await this.productService.findOneById(productId);
+    if (!product) throw new NotFoundException('product was not found');
 
     if (this.isProductInFavorites(user, product)) {
       throw new ConflictException('product is already in your favorites');
@@ -28,7 +31,10 @@ export class FavoriteListService {
 
   async deleteFromFavorites(userId: number, productId: number) {
     const user = await this.userService.findOneByIdWithJoin(userId);
+    if (!user) throw new NotFoundException('user was not found');
+
     const product = await this.productService.findOneById(productId);
+    if (!product) throw new NotFoundException('product was not found');
 
     if (!this.isProductInFavorites(user, product))
       throw new NotFoundException('product is not in favorites to delete it');

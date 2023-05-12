@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProductService } from 'src/product/product.service';
 import { UserService } from 'src/user/user.service';
 import { Question } from './question.entity';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class QuestionService {
@@ -30,8 +30,8 @@ export class QuestionService {
     if (!product) throw new NotFoundException('product not found');
 
     const questionCreated = this.questionRepo.create({
-      user,
-      product,
+      userId: user.id,
+      productId: product.id,
       question,
     });
 
@@ -44,12 +44,6 @@ export class QuestionService {
       throw new NotFoundException('question was not found');
     }
 
-    if (userId != questionFound.user.id) {
-      throw new UnauthorizedException(
-        "you can't delete a question that you didn't make",
-      );
-    }
-
     const questionDeleted = await this.questionRepo.delete({
       id: questionId,
       user: { id: userId },
@@ -60,8 +54,11 @@ export class QuestionService {
     }
   }
 
-  async find() {
-    return await this.questionRepo.find();
+  async findByProductIdWithJoins(productId: number) {
+    return await this.questionRepo.find({
+      relations: ['user', 'product'],
+      where: { productId },
+    });
   }
 
   async findOneById(id: number) {

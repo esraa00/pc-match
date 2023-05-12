@@ -17,8 +17,14 @@ export class Answer {
   @ManyToOne(() => Question)
   question: Question;
 
+  @Column()
+  questionId: number;
+
   @ManyToOne(() => User)
   user: User;
+
+  @Column()
+  userId: number;
 
   @Column()
   answer: string;

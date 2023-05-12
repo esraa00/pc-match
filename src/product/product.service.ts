@@ -52,9 +52,15 @@ export class ProductService {
     return await this.repo.save(createdProduct);
   }
 
-  async findOneById(id: number) {
+  async findOneByIdWithJoins(id: number) {
     return await this.repo.findOne({
       relations: ['category', 'user', 'tags'],
+      where: { id },
+    });
+  }
+
+  async findOneById(id: number) {
+    return await this.repo.findOne({
       where: { id },
     });
   }

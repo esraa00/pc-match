@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { NotFoundException } from '@nestjs/common/exceptions';
 import { Roles } from 'src/decorators';
-import { CreateTagDTO } from './dto/Create-tag.dto';
+import { CreateTagDTO } from './dto/create-tag.dto';
 import { DeleteTagByNameDTO } from './dto/delete-tag-by-name.dto';
 import { GetTagByNameDTO } from './dto/get-tag-by-name.dto';
 import { TagService } from './tag.service';
