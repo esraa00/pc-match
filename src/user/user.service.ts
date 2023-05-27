@@ -9,20 +9,11 @@ import { Role } from 'src/role/role.entity';
 export class UserService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  async create(
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    phoneNumber: string,
-    role: Role,
-  ) {
+  async create(fullName: string, email: string, password: string, role: Role) {
     const user = this.repo.create({
-      firstName,
-      lastName,
+      fullName,
       email,
       password,
-      phoneNumber,
       roles: [role],
     });
     return await this.repo.save(user);

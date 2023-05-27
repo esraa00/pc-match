@@ -20,19 +20,13 @@ export class User {
   id: number;
 
   @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  fullName: string;
 
   @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
-
-  @Column()
-  phoneNumber: string;
 
   @Column({ nullable: true })
   profilePicture: string;

@@ -31,11 +31,9 @@ export class AuthService {
       throw new NotFoundException("customer role doesn't exist anymore");
 
     const user = await this.userService.create(
-      body.firstName,
-      body.lastName,
+      body.fullName,
       body.email,
       hashedPassword,
-      body.phoneNumber,
       customerRole,
     );
     const accessToken = this.customJwtService.signAccessToken({
