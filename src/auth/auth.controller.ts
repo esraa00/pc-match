@@ -28,9 +28,13 @@ export class AuthController {
     res.cookie('accessToken', accessToken, {
       maxAge: +this.configService.get('COOKIE_ACCESS_TOKEN_EXP'),
     });
-    res.cookie('refreshToken', refreshToken, {
-      maxAge: +this.configService.get('COOKIE_REFRESH_TOKEN_EXP'),
-    });
+    res
+      .cookie('refreshToken', refreshToken, {
+        maxAge: +this.configService.get('COOKIE_REFRESH_TOKEN_EXP'),
+      })
+      .json({
+        status: 'success',
+      });
   }
 
   @Post('local/login')

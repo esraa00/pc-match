@@ -50,6 +50,12 @@ export class AuthService {
     const userFound = await this.userService.findOneByEmail(body.email);
     if (!userFound) throw new NotFoundException('user not found');
 
+    const userRoles = userFound.roles;
+    userRoles.map(async (userRole) => {
+      const role = await this.roleService.findOneById(userRole.id);
+      console.log(role);
+    });
+
     const isPasswordMatches = await compare(body.password, userFound.password);
     if (!isPasswordMatches)
       throw new UnauthorizedException('password is incorrect');
